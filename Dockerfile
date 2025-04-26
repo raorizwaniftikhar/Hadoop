@@ -1,6 +1,5 @@
-# Start from Homebrew image (or use a lightweight base image)
+# 🌱 Start from the base Ubuntu image
 FROM  ubuntu:latest
-# FROM  ubuntu-hadoop:v1
 
 # Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -19,6 +18,7 @@ RUN apt-get update && apt-get install -y git \
     && apt-get install -y passwd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# 👤 Set up SSH and the default users
 RUN echo 'ubuntu:ubuntu' | chpasswd && \
     usermod -aG sudo ubuntu && \
     mkdir /var/run/sshd  && \
@@ -26,10 +26,10 @@ RUN echo 'ubuntu:ubuntu' | chpasswd && \
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config  && \
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-# # Set JAVA_HOME for OpenJDK 17 installed
+# # Set JAVA_HOME for OpenJDK 11 installed
 ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-arm64"
 
-# # Hadoop
+# 🛠️ Define paths for Hadoop and its components
 ENV HADOOP_HOME="/opt/hadoop"
 ENV HADOOP_COMMON_HOME="$HADOOP_HOME"
 ENV HADOOP_HDFS_HOME="$HADOOP_HOME"
@@ -38,38 +38,33 @@ ENV HADOOP_MAPRED_HOME="$HADOOP_HOME"
 ENV HADOOP_YARN_HOME="$HADOOP_HOME"
 
 
-# # HBase
+# 📦 Define paths for other big data components
 ENV HBASE_HOME="/opt/hbase"
-
-# # Flume
 ENV FLUME_HOME="/opt/flume"
-
-# # Hive
 ENV HIVE_HOME="/opt/hive"
 
-# # Hadoop configuration environment variables
+# ⚙️ Hadoop Java Options & IPv4 preference
 ENV HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 ENV HADOOP_COMMON_LIB_NATIVE_DIR="$HADOOP_HOME/lib/native"
 ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true"
-# Secuerty Setting
-
-# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.realm= -Djava.security.krb5.kdc="
-# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.conf=/etc/krb5.conf"
-# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.debug=true"
-# ENV HADOOP_OPTS="$HADOOP_OPTS -Dsun.security.krb5.debug=true"
 ENV HADOOP_OPTS="$HADOOP_OPTS --add-opens java.base/java.lang=ALL-UNNAMED"
 
+# 👤 Set default Hadoop users for its daemons
 ENV HDFS_NAMENODE_USER=ubuntu
 ENV HDFS_DATANODE_USER=ubuntu
 ENV HDFS_SECONDARYNAMENODE_USER=ubuntu
 ENV YARN_RESOURCEMANAGER_USER=ubuntu
 ENV YARN_NODEMANAGER_USER=ubuntu
-
-
 ENV HADOOP_USER_NAME=ubuntu
+
+# 📂 Define Hadoop log and PID directories
 ENV HADOOP_PID_DIR=/tmp/hadoop-root/pids
 ENV HADOOP_LOG_DIR=/tmp/hadoop-root/logs
+
+# 🧯 Disable unnecessary warnings
 ENV HADOOP_HOME_WARN_SUPPRESS=true
+
+# 📋 Hadoop logging configuration
 ENV HADOOP_ROOT_LOGGER=INFO,console
 ENV HADOOP_SECURITY_LOGGER=INFO,NullAppender
 ENV HADOOP_NAMENODE_OPTS="-Dhadoop.security.logger=INFO,RFAS"
@@ -78,9 +73,18 @@ ENV HADOOP_SECONDARYNAMENODE_OPTS="-Dhadoop.security.logger=INFO,RFAS"
 ENV HADOOP_JOBTRACKER_OPTS="-Dhadoop.security.logger=ERROR,JSA"
 ENV HADOOP_TASKTRACKER_OPTS="-Dhadoop.security.logger=ERROR,JSA"
 ENV HADOOP_CLIENT_OPTS="-Dhadoop.security.logger=ERROR,console"
+
+# 🔒 Secure Hadoop Datanodes
 ENV HADOOP_SECURE_DN_USER=hdfs
 ENV HADOOP_SECURE_DN_PID_DIR=/tmp/hadoop-root/pids
 ENV HADOOP_SECURE_DN_LOG_DIR=/tmp/hadoop-root/logs
+
+# Secuerty Setting
+
+# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.realm= -Djava.security.krb5.kdc="
+# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.conf=/etc/krb5.conf"
+# ENV HADOOP_OPTS="$HADOOP_OPTS -Djava.security.krb5.debug=true"
+# ENV HADOOP_OPTS="$HADOOP_OPTS -Dsun.security.krb5.debug=true"
 
 # # Add Hadoop ecosystem tools to PATH
 ENV PATH=/bin:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HIVE_HOME/bin:$HBASE_HOME/bin:$FLUME_HOME/bin
