@@ -1,0 +1,52 @@
+<configuration>
+    <!-- Set MapReduce framework to use YARN -->
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <!-- Set MapReduce application classpath -->
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*</value>
+    </property>
+
+    <!-- Set JobHistory address to use the YARN resource manager (replace IP with service name) -->
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>mapreduce-history:10020</value>  <!-- Replace with Docker Compose service name -->
+    </property>
+
+    <!-- Set JobHistory Webapp address (replace IP with service name) -->
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>mapreduce-history:19888</value>  <!-- Replace with Docker Compose service name -->
+    </property>
+
+    <!-- Set intermediate and done directories for MapReduce jobs -->
+    <property>
+        <name>mapreduce.jobhistory.intermediate-done-dir</name>
+        <value>/usr/local/hadoop/data/mapred/history/done_intermediate</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.done-dir</name>
+        <value>/usr/local/hadoop/data/mapred/history/done</value>
+    </property>
+
+    <!-- Set JobHistory Webapp HTTPS address (replace IP with service name) -->
+    <property>
+        <name>mapreduce.jobhistory.webapp.https.address</name>
+        <value>mapreduce-history:19890</value>  <!-- Replace with Docker Compose service name -->
+    </property>
+</configuration>

@@ -1,0 +1,126 @@
+<configuration>
+    <!-- Set replication factor to 3 for fault tolerance -->
+    <property>
+        <name>dfs.replication</name>
+        <value>3</value>
+    </property>
+
+    <!-- Local directories for NameNode -->
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:/usr/local/hadoop/data/hdfs/namenode</value>
+    </property>
+
+    <!-- Use the service name for the NameNode RPC address instead of hardcoding IP -->
+    <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>namenode:8020</value> <!-- Use service name 'namenode' -->
+    </property>
+    <property>
+    <name>dfs.namenode.rpc-bind-host</name>
+    <value>0.0.0.0</value>
+    </property>
+
+    <property>
+    <name>dfs.namenode.http-bind-host</name>
+    <value>0.0.0.0</value>
+    </property>
+
+
+    <!-- Local directories for DataNode -->
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:/usr/local/hadoop/data/hdfs/datanode</value>
+    </property>
+
+    <!-- Directory for NameNode checkpoint -->
+    <property>
+        <name>dfs.namenode.checkpoint.dir</name>
+        <value>file:/usr/local/hadoop/data/hdfs/namesecondary</value>
+    </property>
+
+    <!-- Directory for NameNode edits -->
+    <property>
+        <name>dfs.namenode.checkpoint.edits.dir</name>
+        <value>file:/usr/local/hadoop/data/hdfs/namesecondary</value>
+    </property>
+
+    <!-- Enable WebHDFS for remote access to HDFS -->
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+
+    <!-- Disable HDFS permissions (can be enabled if needed for more security) -->
+    <property>
+        <name>dfs.permissions</name>
+        <value>false</value>
+    </property>
+
+    <!-- Set DataNode configurations -->
+    <property>
+        <name>dfs.datanode.max.transfer.threads</name>
+        <value>4096</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.handler.count</name>
+        <value>30</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.directoryscan.interval</name>
+        <value>5m</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.directoryscan.threads</name>
+        <value>4</value>
+    </property>
+
+    <!-- Set bandwidth for data node balance -->
+    <property>
+        <name>dfs.datanode.balance.bandwidthPerSec</name>
+        <value>1048576</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.moves</name>
+        <value>5</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.moves.threads</name>
+        <value>1</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.moves.threads.per.datanode</name>
+        <value>1</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.moves.per.datanode</name>
+        <value>5</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.bandwidthPerSecPerNode</name>
+        <value>1048576</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.movesPerNode</name>
+        <value>5</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.movesPerNode.threads</name>
+        <value>1</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.balance.max.concurrent.movesPerNode.threads.per.datanode</name>
+        <value>1</value>
+    </property>
+</configuration>

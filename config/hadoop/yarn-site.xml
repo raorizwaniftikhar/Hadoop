@@ -1,0 +1,117 @@
+<configuration>
+    <!-- ResourceManager Hostname -->
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>resourcemanager</value> <!-- Must match your Docker Compose service name -->
+    </property>
+
+    <!-- ResourceManager RPC Address -->
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>resourcemanager:8032</value>
+    </property>
+
+    <!-- ResourceManager Web UI -->
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>resourcemanager:8088</value>
+    </property>
+
+    <!-- Disable low priority features (to avoid priority errors) -->
+    <property>
+        <name>yarn.resourcemanager.low.priority.enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.low.priority.enabled</name>
+        <value>false</value>
+    </property>
+
+    <!-- NodeManager Auxiliary Services -->
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+
+    <!-- NodeManager Local Directories -->
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>file:/usr/local/hadoop/data/yarn/nodemanager</value>
+    </property>
+
+    <!-- NodeManager Log Directories -->
+    <property>
+        <name>yarn.nodemanager.log-dirs</name>
+        <value>file:/usr/local/hadoop/logs/yarn/nodemanager</value>
+    </property>
+
+    <!-- Resource Capacity -->
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>1600</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>1</value>
+    </property>
+
+    <!-- Scheduler Resource Limits -->
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>1600</value>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>1</value>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>128</value>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>1</value>
+    </property>
+
+    <!-- Memory Checks -->
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>false</value>
+    </property>
+
+    <!-- Container Executor Settings -->
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor</value>
+    </property>
+
+    <!-- Non-secure Mode User Settings -->
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+        <value>ubuntu</value> <!-- Use the actual user inside your Docker container -->
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>ubuntu</value> <!-- Use the actual group inside your container -->
+    </property>
+</configuration>

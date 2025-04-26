@@ -1,0 +1,304 @@
+version: '3.8'
+
+services:
+  # HDFS NameNode
+  namenode:
+    image: hadoop-echo-systems:latest
+    container_name: namenode
+    hostname: namenode
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+    ports:
+      - "9870:9870"  # HDFS UI
+      - "8020:8020"  # HDFS RPC
+    volumes:
+      - namenode-data:/usr/local/hadoop/data/hdfs/namenode
+    networks:
+      - hadoop-net
+    tty: true
+
+  # HDFS DataNode 1
+  datanode1:
+    image: hadoop-echo-systems:latest
+    container_name: datanode1
+    hostname: datanode1
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+      - NAMENODE_HOST=namenode
+    volumes:
+      - datanode1-data:/usr/local/hadoop/data/hdfs/datanode
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"   # Web UI
+      - "9866:9866"   # Data Transfer
+      - "9867:9867"   # IPC
+    networks:
+      - hadoop-net
+    tty: true
+
+  datanode2:
+    image: hadoop-echo-systems:latest
+    container_name: datanode2
+    hostname: datanode2
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+      - NAMENODE_HOST=namenode
+    volumes:
+      - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
+    depends_on:
+      - namenode
+    ports:
+      - "9874:9864"   # Web UI
+      - "9876:9866"   # Data Transfer
+      - "9877:9867"   # IPC
+    networks:
+      - hadoop-net
+    tty: true
+
+  mapreduce-history:
+    image: hadoop-echo-systems:latest
+    container_name: mapreduce-history
+    hostname: mapreduce-history
+    environment:
+      - HADOOP_ROLE=mapreduce-history
+    ports:
+      - "19888:19888"
+      - "19890:19890"
+    depends_on:
+      - resourcemanager
+    networks:
+      - hadoop-net
+    tty: true
+
+
+  # YARN ResourceManager
+  resourcemanager:
+    image: hadoop-echo-systems:latest
+    container_name: resourcemanager
+    hostname: resourcemanager
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+      - NAMENODE_HOST=namenode
+    ports:
+      - "8088:8088"  # YARN ResourceManager UI
+      - "8032:8032"  # YARN ResourceManager RPC
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-net
+    tty: true
+
+  # YARN NodeManager
+  nodemanager:
+    image: hadoop-echo-systems:latest
+    container_name: nodemanager
+    hostname: nodemanager
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+      - RESOURCEMANAGER_HOST=resourcemanager
+    ports:
+      - "8042:8042"  # YARN NodeManager UI
+    depends_on:
+      - resourcemanager
+    networks:
+      - hadoop-net
+    tty: true
+
+  # Zookeeper
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+    # expose:
+    #   - "2181"
+    networks:
+      - hadoop-net
+
+  # Temp disable due to memory issue
+  zoonavigator:
+    image: elkozmon/zoonavigator
+    container_name: zoonavigator
+    environment:
+      - CONNECTION_STRING=zookeeper:2181
+      - HTTP_AUTH_TYPE=basic
+      - HTTP_AUTH_USER=hadoop
+      - HTTP_AUTH_PASS=hadoop
+    ports:
+      - "9000:9000" # Zoonavigator UI
+    networks:
+      - hadoop-net
+
+  # Kafka Broker
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_LISTENERS=PLAINTEXT_INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT_INTERNAL
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LOG_RETENTION_HOURS=168
+      - KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS=300000
+      - KAFKA_LOG_RETENTION_BYTES=1073741824
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_NUM_PARTITIONS=3 
+      - KAFKA_MESSAGE_MAX_BYTES=209715200  # 200 MB
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=209715200  # 200 MB
+      - KAFKA_MAX_REQUEST_SIZE=209715200
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+      - "9093:9093"
+    restart: unless-stopped
+    volumes:
+      - kafka-data:/kafka
+    depends_on:
+      - zookeeper
+    networks:
+      - hadoop-net
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    environment:
+      - KAFKA_BROKERCONNECT=kafka:9092
+      - KAFKA_ZOOKEEPERCONNECT=zookeeper:2181
+    ports:
+      - "9001:9000" # Kafdrop UI
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - hadoop-net
+ 
+  #Temp disble due to memeory issue
+  hbase-master:
+    image: hadoop-echo-systems:latest
+    container_name: hbase-master
+    hostname: hbase-master
+    environment:
+      - HADOOP_ROLE=hbase-master
+    depends_on:
+      - namenode
+      - zookeeper
+    networks:
+      - hadoop-net
+    ports:
+      - "16010:16010"  # HBase Master Web UI
+    tty: true
+
+  hbase-regionserver:
+    image: hadoop-echo-systems:latest
+    container_name: hbase-regionserver
+    hostname: hbase-regionserver
+    environment:
+      - HADOOP_ROLE=hbase-regionserver
+    depends_on:
+      - hbase-master
+    networks:
+      - hadoop-net
+    ports:
+      - "16030:16030"  # RegionServer UI
+    tty: true
+
+  # Hive Metastore  
+  hive-metastore:
+    image: hadoop-echo-systems:latest
+    container_name: hive-metastore
+    environment:
+      - HADOOP_ROLE=hive-metastore
+      - HIVE_METASTORE_URI=thrift://hive-metastore:9083
+    ports:
+      - "9083:9083"
+    networks:
+      - hadoop-net
+
+  hive-server2:
+    image: hadoop-echo-systems:latest
+    container_name: hive-server2
+    environment:
+      - HADOOP_ROLE=hive-server2
+      - HIVE_SERVER2_THRIFT_PORT=10000
+    ports:
+      - "10000:10000"
+    depends_on:
+      - hive-metastore
+    networks:
+      - hadoop-net
+
+  # Spark Master
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    ports:
+      - "7077:7077"  # Spark Master for Test on host machine "nc -zv localhost 7077"
+      - "8080:8080"  # Spark UI
+    networks:
+      - hadoop-net
+
+  # Spark Worker
+  spark-worker:
+    image: bitnami/spark:latest
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    ports:
+      - "8081:8081"  # Spark Worker UI
+    depends_on:
+      - spark-master
+    networks:
+      - hadoop-net
+  spark-client:
+    image: bitnami/spark:latest
+    container_name: spark-client
+    environment:
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    ports:
+      - "7078:7078"
+      - "7079:7079"
+      - "4041:4041"
+    networks:
+      - hadoop-net
+
+  # Spark History Server
+  spark-history-server:
+    image: bitnami/spark:latest
+    container_name: spark-history-server
+    command:
+      - "/opt/bitnami/spark/bin/spark-class"
+      - "org.apache.spark.deploy.history.HistoryServer"
+    environment:
+      - SPARK_MODE=history-server
+      - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=hdfs://namenode:8020/spark-history -Dspark.history.ui.port=18080 -Dspark.history.ui.acls.enable=false
+    ports:
+      - "18080:18080"
+    depends_on:
+      - spark-master
+    networks:
+      - hadoop-net
+
+networks:
+  hadoop-net:
+    driver: bridge
+
+volumes:
+  namenode-data:
+  datanode1-data:
+  datanode2-data:
+  kafka-data:

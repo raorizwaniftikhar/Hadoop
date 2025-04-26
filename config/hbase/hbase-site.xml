@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Zookeeper Configuration -->
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>zookeeper</value> <!-- Use service name instead of IP -->
+    </property>
+
+    <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>2181</value>
+    </property>
+
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/usr/local/zookeeper/data</value>
+    </property>
+
+    <!-- HBase Master Settings -->
+    <property>
+        <name>hbase.master</name>
+        <value>hbase-master:16010</value> <!-- Use service name -->
+    </property>
+    <property>
+    <name>hbase.master.info.port</name>
+    <value>16010</value>
+    </property>
+    <!-- Region Server Settings -->
+    <property>
+        <name>hbase.regionserver.port</name>
+        <value>16030</value>
+    </property>
+
+    <!-- HBase Storage Directory -->
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://namenode:8020/hbase</value> <!-- HDFS URI using service name -->
+    </property>
+
+    <!-- Other HBase Configurations -->
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hbase.hregion.max.filesize</name>
+        <value>268435456</value>
+    </property>
+
+    <property>
+        <name>hbase.hregion.memstore.flush.size</name>
+        <value>33554432</value>
+    </property>
+
+</configuration>
