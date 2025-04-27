@@ -254,3 +254,8 @@ To enable this, add the following to your `mapred-site.xml`:
 ```
 
 ---
+
+hadoop jar target/AmazonReviewAnalysis-1.0-SNAPSHOT.jar
+com.amazon.AverageRatingPerCategory \
+/user/hadoop/amazon_reviews \
+/user/hadoop/output

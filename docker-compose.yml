@@ -27,6 +27,7 @@ services:
       - NAMENODE_HOST=namenode
     volumes:
       - datanode1-data:/usr/local/hadoop/data/hdfs/datanode
+    restart: always
     depends_on:
       - namenode
     ports:
@@ -46,6 +47,7 @@ services:
       - NAMENODE_HOST=namenode
     volumes:
       - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
+    restart: always
     depends_on:
       - namenode
     ports:
@@ -290,6 +292,7 @@ services:
       - "18080:18080"
     depends_on:
       - spark-master
+      - namenode
     networks:
       - hadoop-net
 
