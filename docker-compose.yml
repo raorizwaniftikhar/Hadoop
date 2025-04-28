@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # HDFS NameNode
   namenode:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: namenode
     hostname: namenode
     environment:
@@ -19,7 +19,7 @@ services:
 
   # HDFS DataNode 1
   datanode1:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: datanode1
     hostname: datanode1
     environment:
@@ -39,7 +39,7 @@ services:
     tty: true
 
   datanode2:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: datanode2
     hostname: datanode2
     environment:
@@ -59,7 +59,7 @@ services:
     tty: true
 
   mapreduce-history:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: mapreduce-history
     hostname: mapreduce-history
     environment:
@@ -76,7 +76,7 @@ services:
 
   # YARN ResourceManager
   resourcemanager:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: resourcemanager
     hostname: resourcemanager
     environment:
@@ -93,7 +93,7 @@ services:
 
   # YARN NodeManager
   nodemanager:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: nodemanager
     hostname: nodemanager
     environment:
@@ -187,7 +187,7 @@ services:
  
   #Temp disble due to memeory issue
   hbase-master:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: hbase-master
     hostname: hbase-master
     environment:
@@ -202,7 +202,7 @@ services:
     tty: true
 
   hbase-regionserver:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: hbase-regionserver
     hostname: hbase-regionserver
     environment:
@@ -217,7 +217,7 @@ services:
 
   # Hive Metastore  
   hive-metastore:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: hive-metastore
     environment:
       - HADOOP_ROLE=hive-metastore
@@ -228,7 +228,7 @@ services:
       - hadoop-net
 
   hive-server2:
-    image: hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems:latest
     container_name: hive-server2
     environment:
       - HADOOP_ROLE=hive-server2
