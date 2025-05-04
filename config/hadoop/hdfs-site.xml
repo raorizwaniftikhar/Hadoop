@@ -11,20 +11,62 @@
         <value>file:/usr/local/hadoop/data/hdfs/namenode</value>
     </property>
 
-    <!-- Use the service name for the NameNode RPC address instead of hardcoding IP -->
-    <property>
-        <name>dfs.namenode.rpc-address</name>
-        <value>namenode-service:8020</value> <!-- Use service name 'namenode' -->
-    </property>
-    <property>
-    <name>dfs.namenode.rpc-bind-host</name>
-    <value>0.0.0.0</value>
-    </property>
+  <!-- Use Quorum Journal Manager (QJM) for HA -->
+  <property>
+    <name>dfs.nameservices</name>
+    <value>hadoop-ha</value>
+  </property>
 
-    <property>
-    <name>dfs.namenode.http-bind-host</name>
-    <value>0.0.0.0</value>
-    </property>
+  <property>
+    <name>dfs.ha.namenodes.hadoop-ha</name>
+    <value>nn1,nn2</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.rpc-address.hadoop-ha.nn1</name>
+    <value>namenode-deployment-0.namenode-service.bigdata.svc.cluster.local:8020</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.rpc-address.hadoop-ha.nn2</name>
+    <value>namenode-deployment-1.namenode-service.bigdata.svc.cluster.local:8020</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-address.hadoop-ha.nn1</name>
+    <value>namenode-deployment-0.namenode-service.bigdata.svc.cluster.local:9870</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-address.hadoop-ha.nn2</name>
+    <value>namenode-deployment-1.namenode-service.bigdata.svc.cluster.local:9870</value>
+  </property>
+
+  <property>
+    <name>dfs.client.failover.proxy.provider.hadoop-ha</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+  </property>
+
+  <!-- JournalNodes quorum (replace with actual hostnames if using StatefulSets) -->
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://journalnode-0:8485;journalnode-1:8485;journalnode-2:8485/hadoop-ha</value>
+  </property>
+
+  <property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>ha.zookeeper.quorum</name>
+    <value>zookeeper:2181</value>
+  </property>
+
+  <property>
+    <name>dfs.journalnode.edits.dir</name>
+    <value>/usr/local/hadoop/data/hdfs/journal</value>
+  </property>
 
 
     <!-- Local directories for DataNode -->

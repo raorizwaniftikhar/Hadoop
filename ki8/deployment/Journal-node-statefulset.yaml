@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: journalnode
+  namespace: bigdata
 spec:
   clusterIP: None
   selector:
@@ -14,6 +15,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: journalnode
+  namespace: bigdata
 spec:
   serviceName: "journalnode"
   replicas: 3
