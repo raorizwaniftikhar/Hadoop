@@ -2,19 +2,19 @@
     <!-- ResourceManager Hostname -->
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>resourcemanager</value> <!-- Must match your Docker Compose service name -->
+        <value>resourcemanager-service</value> <!-- Must match your Docker Compose service name -->
     </property>
 
     <!-- ResourceManager RPC Address -->
     <property>
         <name>yarn.resourcemanager.address</name>
-        <value>resourcemanager:8032</value>
+        <value>resourcemanager-service:8032</value>
     </property>
 
     <!-- ResourceManager Web UI -->
     <property>
         <name>yarn.resourcemanager.webapp.address</name>
-        <value>resourcemanager:8088</value>
+        <value>resourcemanager-service:8088</value>
     </property>
 
     <!-- Disable low priority features (to avoid priority errors) -->

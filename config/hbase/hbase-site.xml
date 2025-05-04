@@ -20,7 +20,7 @@
     <!-- HBase Master Settings -->
     <property>
         <name>hbase.master</name>
-        <value>hbase-master:16010</value> <!-- Use service name -->
+        <value>hbase-master-service:16010</value> <!-- Use service name -->
     </property>
     <property>
     <name>hbase.master.info.port</name>
@@ -35,7 +35,7 @@
     <!-- HBase Storage Directory -->
     <property>
         <name>hbase.rootdir</name>
-        <value>hdfs://namenode:8020/hbase</value> <!-- HDFS URI using service name -->
+        <value>hdfs://namenode-service:8020/hbase</value> <!-- HDFS URI using service name -->
     </property>
 
     <!-- Other HBase Configurations -->

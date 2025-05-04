@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mapreduce-history
+  namespace: bigdata
+spec:
+  selector:
+    app: mapreduce-history
+  ports:
+    - port: 19888
+      targetPort: 19888
+      name: ui
+    - port: 19890
+      targetPort: 19890
+      name: internal
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mapreduce-history
+  namespace: bigdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mapreduce-history
+  template:
+    metadata:
+      labels:
+        app: mapreduce-history
+        component: historyserver
+    spec:
+      containers:
+        - name: mapreduce-history
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          env:
+            - name: HADOOP_ROLE
+              value: mapreduce-history
+          ports:
+            - containerPort: 19888  # UI
+            - containerPort: 19890  # IPC
+          tty: true
+      terminationGracePeriodSeconds: 30

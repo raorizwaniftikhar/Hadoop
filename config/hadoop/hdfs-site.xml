@@ -14,7 +14,7 @@
     <!-- Use the service name for the NameNode RPC address instead of hardcoding IP -->
     <property>
         <name>dfs.namenode.rpc-address</name>
-        <value>namenode:8020</value> <!-- Use service name 'namenode' -->
+        <value>namenode-service:8020</value> <!-- Use service name 'namenode' -->
     </property>
     <property>
     <name>dfs.namenode.rpc-bind-host</name>

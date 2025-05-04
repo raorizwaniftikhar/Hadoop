@@ -25,13 +25,13 @@
     <!-- Set JobHistory address to use the YARN resource manager (replace IP with service name) -->
     <property>
         <name>mapreduce.jobhistory.address</name>
-        <value>mapreduce-history:10020</value>  <!-- Replace with Docker Compose service name -->
+        <value>mapreduce-history-service:10020</value>  <!-- Replace with Docker Compose service name -->
     </property>
 
     <!-- Set JobHistory Webapp address (replace IP with service name) -->
     <property>
         <name>mapreduce.jobhistory.webapp.address</name>
-        <value>mapreduce-history:19888</value>  <!-- Replace with Docker Compose service name -->
+        <value>mapreduce-history-service:19888</value>  <!-- Replace with Docker Compose service name -->
     </property>
 
     <!-- Set intermediate and done directories for MapReduce jobs -->
@@ -47,6 +47,6 @@
     <!-- Set JobHistory Webapp HTTPS address (replace IP with service name) -->
     <property>
         <name>mapreduce.jobhistory.webapp.https.address</name>
-        <value>mapreduce-history:19890</value>  <!-- Replace with Docker Compose service name -->
+        <value>mapreduce-history-service:19890</value>  <!-- Replace with Docker Compose service name -->
     </property>
 </configuration>

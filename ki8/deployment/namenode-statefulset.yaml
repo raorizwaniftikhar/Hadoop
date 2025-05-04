@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: namenode-service
+  namespace: bigdata
+spec:
+  selector:
+    app: namenode
+  ports:
+    - port: 9870  # Web UI
+      targetPort: 9870
+      name: web
+    - port: 8020  # IPC
+      targetPort: 8020
+      name: ipc
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: namenode-deployment
+  namespace: bigdata
+  labels:
+    app: namenode
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: namenode
+  template:
+    metadata:
+      labels:
+        app: namenode
+        component: namenode
+    spec:
+      containers:
+        - name: namenode
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          ports:
+            - containerPort: 9870
+            - containerPort: 8020
+          env:
+            - name: CLUSTER_NAME
+              value: HadoopCluster
+          volumeMounts:
+            - mountPath: /usr/local/hadoop/data/hdfs/namenode
+              name: namenode-storage
+          tty: true
+      volumes:
+        - name: namenode-storage
+          persistentVolumeClaim:
+            claimName: namenode-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: namenode-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

@@ -2,7 +2,7 @@
     <property>
         <name>fs.defaultFS</name>
         <!-- Use the service name for Namenode instead of static IP -->
-        <value>hdfs://namenode:8020</value>
+        <value>hdfs://namenode-service:8020</value>
     </property>
     <property>
         <name>hadoop.tmp.dir</name>

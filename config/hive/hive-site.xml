@@ -1,6 +1,6 @@
 <configuration>
     <property>
         <name>hive.metastore.uris</name>
-        <value>thrift://hive-metastore:9083</value>
+        <value>thrift://hive-metastore-service:9083</value>
     </property>
 </configuration>

@@ -128,6 +128,22 @@ start_yarn_nodemanager() {
   $HADOOP_HOME/bin/yarn --daemon start nodemanager >> "$LOG_FILE" 2>&1
 }
 
+format_zkfc() {
+  log "🔧 Checking if ZooKeeper Failover Controller (ZKFC) needs formatting..."
+  
+  local zkfc_marker_file="/home/ubuntu/.zkfc_formatted"
+  
+  if [ ! -f "$zkfc_marker_file" ]; then
+    log "🧹 Formatting ZKFC with ZooKeeper..."
+    $HADOOP_HOME/bin/hdfs zkfc -formatZK -force >> "$LOG_FILE" 2>&1
+    touch "$zkfc_marker_file"
+    log "✅ ZKFC formatting completed and marker file created."
+  else
+    log "📌 ZKFC already formatted. Skipping."
+  fi
+}
+
+
 # ----------------------
 # Hive / HBase Services
 # ----------------------
@@ -211,6 +227,9 @@ case "$ROLE" in
     ;;
   mapreduce-history)
     start_mapreduce_jobhistory
+    ;;
+  zkfc-format)
+    format_zkfc
     ;;
   *)
     log "⚠️ No matching service startup for role: $ROLE"

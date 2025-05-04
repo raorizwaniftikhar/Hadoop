@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: bigdata
+spec:
+  ports:
+    - name: broker
+      port: 9092
+      targetPort: 9092
+    - name: controller
+      port: 9093
+      targetPort: 9093
+    - name: external
+      port: 9094
+      targetPort: 9094
+  selector:
+    app: kafka
+  type: NodePort
+---
+# Kafka Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  namespace: bigdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: apache/kafka:latest
+          env:
+            - name: KAFKA_NODE_ID
+              value: "1"
+            - name: KAFKA_PROCESS_ROLES
+              value: broker,controller
+            - name: KAFKA_LISTENERS
+              value: PLAINTEXT_INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT_INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: PLAINTEXT_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: PLAINTEXT_INTERNAL
+            - name: KAFKA_CONTROLLER_LISTENER_NAMES
+              value: CONTROLLER
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: 1@kafka:9093
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: KAFKA_LOG_RETENTION_HOURS
+              value: "168"
+            - name: KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS
+              value: "300000"
+            - name: KAFKA_LOG_RETENTION_BYTES
+              value: "1073741824"
+            - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
+              value: "0"
+            - name: KAFKA_NUM_PARTITIONS
+              value: "3"
+            - name: KAFKA_MESSAGE_MAX_BYTES
+              value: "209715200"
+            - name: KAFKA_REPLICA_FETCH_MAX_BYTES
+              value: "209715200"
+            - name: KAFKA_MAX_REQUEST_SIZE
+              value: "209715200"
+            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+              value: "true"
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+            - containerPort: 9094
+---
+# Kafdrop Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafdrop
+  namespace: bigdata
+spec:
+  ports:
+    - port: 9001
+      targetPort: 9000
+  selector:
+    app: kafdrop
+  type: NodePort
+---
+# Kafdrop Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafdrop
+  namespace: bigdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafdrop
+  template:
+    metadata:
+      labels:
+        app: kafdrop
+    spec:
+      containers:
+        - name: kafdrop
+          image: obsidiandynamics/kafdrop
+          env:
+            - name: KAFKA_BROKERCONNECT
+              value: kafka:9092
+            - name: KAFKA_ZOOKEEPERCONNECT
+              value: zookeeper:2181
+          ports:
+            - containerPort: 9000

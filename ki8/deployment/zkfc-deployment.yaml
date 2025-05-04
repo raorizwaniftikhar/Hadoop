@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: zkfc-format-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: zkfc
+        image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+        env:
+        - name: HADOOP_ROLE
+          value: zkfc-format
+      restartPolicy: Never
+  backoffLimit: 1

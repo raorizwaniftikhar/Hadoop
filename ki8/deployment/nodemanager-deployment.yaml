@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nodemanager
+  namespace: bigdata
+  labels:
+    app: nodemanager
+spec:
+  selector:
+    matchLabels:
+      app: nodemanager
+  template:
+    metadata:
+      labels:
+        app: nodemanager
+        component: nodemanager
+    spec:
+      containers:
+        - name: nodemanager
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          env:
+            - name: CLUSTER_NAME
+              value: HadoopCluster
+            - name: RESOURCEMANAGER_HOST
+              value: resourcemanager
+          ports:
+            - containerPort: 8042
+          tty: true
+      terminationGracePeriodSeconds: 30

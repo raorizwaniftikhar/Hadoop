@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-client
+  namespace: bigdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-client
+  template:
+    metadata:
+      labels:
+        app: spark-client
+    spec:
+      containers:
+        - name: spark-client
+          image: bitnami/spark:latest
+          env:
+            - name: SPARK_MASTER_URL
+              value: spark://spark-master:7077
+          ports:
+            - containerPort: 7078
+            - containerPort: 7079
+            - containerPort: 4041
+          tty: true

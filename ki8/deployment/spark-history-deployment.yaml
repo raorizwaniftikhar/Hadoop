@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-history
+  namespace: bigdata
+spec:
+  selector:
+    app: spark-history
+  ports:
+    - port: 18080
+      targetPort: 18080
+      name: ui
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-history
+  namespace: bigdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-history
+  template:
+    metadata:
+      labels:
+        app: spark-history
+    spec:
+      containers:
+        - name: spark-history
+          image: bitnami/spark:latest
+          command:
+            - "/opt/bitnami/spark/bin/spark-class"
+            - "org.apache.spark.deploy.history.HistoryServer"
+          env:
+            - name: SPARK_MODE
+              value: history-server
+            - name: SPARK_HISTORY_OPTS
+              value: >-
+                -Dspark.history.fs.logDirectory=hdfs://namenode-service:8020/spark-history
+                -Dspark.history.ui.port=18080
+                -Dspark.history.ui.acls.enable=false
+          ports:
+            - containerPort: 18080
+          tty: true

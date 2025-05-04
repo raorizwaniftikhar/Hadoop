@@ -3,4 +3,4 @@ amzon-review-data/
 archive (3).zip
 .DS_Store
 
-hadoop jar Amazon-Review-1.0-SNAPSHOT.jar com.java.hadoop.AverageRatingPerCategory /aws/amzon-review-data /output/amazon_reviews
+hadoop jar Amazon-Review-1.0-SNAPSHOT.jar com.java.hadoop.AverageRatingPerCategory /aws/amzon-review-data /output/amazon_reviews-new

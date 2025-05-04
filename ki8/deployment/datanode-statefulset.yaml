@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode
+  namespace: bigdata
+  labels:
+    app: datanode
+spec:
+  clusterIP: None  # Headless service for StatefulSet
+  selector:
+    app: datanode
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: datanode
+  namespace: bigdata
+spec:
+  serviceName: "datanode"
+  replicas: 5
+  selector:
+    matchLabels:
+      app: datanode
+  template:
+    metadata:
+      labels:
+        app: datanode
+        component: datanode
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: datanode
+        image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+        ports:
+        - containerPort: 9864  # Web UI
+        - containerPort: 9866  # Data Transfer
+        - containerPort: 9867  # IPC
+        env:
+        - name: CLUSTER_NAME
+          value: HadoopCluster
+        - name: NAMENODE_HOST
+          value: namenode-service  # Ensure this service exists
+        volumeMounts:
+        - name: datanode-storage
+          mountPath: /usr/local/hadoop/data/hdfs/datanode
+        tty: true
+  volumeClaimTemplates:
+  - metadata:
+      name: datanode-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
