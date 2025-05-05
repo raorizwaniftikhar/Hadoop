@@ -4,12 +4,17 @@ metadata:
   name: journalnode
   namespace: bigdata
 spec:
-  clusterIP: None
+  clusterIP: None 
+  ports:
+    - name: rpc
+      port: 8485
+      targetPort: 8485
+    - name: web
+      port: 8480
+      targetPort: 8480
   selector:
     app: journalnode
-  ports:
-  - name: rpc
-    port: 8485
+
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -32,6 +37,7 @@ spec:
         image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
         ports:
         - containerPort: 8485
+        - containerPort: 8480
         volumeMounts:
         - name: journalnode-storage
           mountPath: /hadoop/dfs/journal

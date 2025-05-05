@@ -10,6 +10,7 @@ spec:
     - port: 9870  # Web UI
       targetPort: 9870
       name: web
+      nodePort: 30987
     - port: 8020  # IPC
       targetPort: 8020
       name: ipc

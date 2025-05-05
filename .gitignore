@@ -2,5 +2,34 @@ opt/
 amzon-review-data/
 archive (3).zip
 .DS_Store
-
+.idea/*
 hadoop jar Amazon-Review-1.0-SNAPSHOT.jar com.java.hadoop.AverageRatingPerCategory /aws/amzon-review-data /output/amazon_reviews-new
+
+spark-submit \
+  --master spark://spark-master:7077 \
+  --deploy-mode client \
+  --class com.scala.hadoop.SparkSubmitKafkaAmazonData \
+  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.5 \
+  --conf spark.dynamicAllocation.enabled=true \
+  --conf spark.dynamicAllocation.shuffleTracking.enabled=true \
+  --conf spark.dynamicAllocation.minExecutors=1 \
+  --conf spark.dynamicAllocation.maxExecutors=2 \
+  --conf spark.executor.cores=1 \
+  --conf spark.executor.memory=1g \
+  /opt/bitnami/ScalaTest-assembly-0.1.0-SNAPSHOT.jar
+
+
+-----------
+kubectl cluster-info
+
+spark-submit \
+  --master k8s://https://192.168.64.4:8443 \
+  --deploy-mode cluster \
+  --class com.scala.hadoop.SparkSubmitKafkaAmazonData \
+  --conf spark.kubernetes.container.image=bitnami/spark:latest \
+  --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
+  --conf spark.dynamicAllocation.enabled=true \
+  --conf spark.dynamicAllocation.shuffleTracking.enabled=true \
+  --conf spark.dynamicAllocation.minExecutors=1 \
+  --conf spark.dynamicAllocation.maxExecutors=4 \
+  local:///opt/bitnami/ScalaTest-assembly-0.1.0-SNAPSHOT.jar

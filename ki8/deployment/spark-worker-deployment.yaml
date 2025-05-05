@@ -4,7 +4,7 @@ metadata:
   name: spark-worker
   namespace: bigdata
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: spark-worker

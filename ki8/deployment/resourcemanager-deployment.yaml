@@ -10,6 +10,7 @@ spec:
     - port: 8088  # Web UI
       targetPort: 8088
       name: web
+      nodePort: 30888
     - port: 8032  # IPC
       targetPort: 8032
       name: ipc

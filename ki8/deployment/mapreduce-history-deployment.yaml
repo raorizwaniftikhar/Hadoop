@@ -9,6 +9,7 @@ spec:
   ports:
     - port: 19888
       targetPort: 19888
+      nodePort: 30988
       name: ui
     - port: 19890
       targetPort: 19890

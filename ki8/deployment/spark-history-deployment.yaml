@@ -10,6 +10,7 @@ spec:
     - port: 18080
       targetPort: 18080
       name: ui
+      nodePort: 31880
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -38,9 +39,10 @@ spec:
               value: history-server
             - name: SPARK_HISTORY_OPTS
               value: >-
-                -Dspark.history.fs.logDirectory=hdfs://namenode-service:8020/spark-history
-                -Dspark.history.ui.port=18080
-                -Dspark.history.ui.acls.enable=false
+                -Dspark.history.fs.logDirectory=hdfs://namenode:8020/spark-history -Dspark.history.ui.port=18080 -Dspark.history.ui.acls.enable=false
+                -Dspark.hadoop.security.authentication=NOSASL
+                -Dhadoop.security.authentication=NOSASL
+                -DHADOOP_USER_NAME=spark
           ports:
             - containerPort: 18080
           tty: true
