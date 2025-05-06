@@ -197,6 +197,25 @@ generate_ssh_host_keys
 start_ssh_service
 add_ssh_known_hosts
 
+
+ROLE=$(hostname)
+
+# Normalize roles from hostname patterns
+if [[ "$ROLE" =~ ^namenode(-deployment)?-[0-9]+$ ]]; then
+  ROLE="namenode"
+elif [[ "$ROLE" =~ ^datanode-[0-9]+$ ]]; then
+  ROLE="datanode"
+elif [[ "$ROLE" =~ ^resourcemanager(-deployment)?-[0-9]+$ ]]; then
+  ROLE="resourcemanager"
+elif [[ "$ROLE" =~ ^nodemanager(-deployment)?-[0-9]+$ ]]; then
+  ROLE="nodemanager"
+elif [[ "$ROLE" =~ ^mapreduce-history(-deployment)?-[0-9]+$ ]]; then
+  ROLE="mapreduce-history"
+elif [[ "$ROLE" =~ ^zkfc-format(-job)?-[a-z0-9]+$ ]]; then
+  ROLE="zkfc-format"
+fi
+
+
 case "$ROLE" in
   namenode)
     format_namenode
