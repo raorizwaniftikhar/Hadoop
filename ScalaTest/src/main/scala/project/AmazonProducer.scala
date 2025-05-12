@@ -10,7 +10,7 @@ import scala.util.{Try, Using}
 object AmazonProducer {
 
   def main(args: Array[String]): Unit = {
-    val folderPath = "/Users/raorizwaniftikhar/Desktop/Hadoop/amzon-review-data" // 🔁 Replace with actual folder path
+    val folderPath = "/Users/rizwan_iftikhar/Desktop/Hadoop/amzon-review-data" // 🔁 Replace with actual folder path
     val kafkaTopic = "amazon_reviews"
 
     // --- Kafka Configuration ---

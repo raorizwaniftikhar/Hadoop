@@ -18,8 +18,9 @@ hadoop jar Amazon-Review-1.0-SNAPSHOT.jar com.java.hadoop.AverageRatingPerCatego
 spark-submit \
   --master spark://spark-master:7077 \
   --deploy-mode client \
-  --class com.scala.hadoop.SparkSubmitKafkaAmazonData \
+  --class com.scala.hadoop.project.AmazonReviewPipeline \
   --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.5 \
+  --conf spark.jars.ivy=/tmp/.ivy2 \
   --conf spark.dynamicAllocation.enabled=true \
   --conf spark.dynamicAllocation.shuffleTracking.enabled=true \
   --conf spark.dynamicAllocation.minExecutors=1 \
@@ -27,8 +28,6 @@ spark-submit \
   --conf spark.executor.cores=1 \
   --conf spark.executor.memory=1g \
   /opt/bitnami/ScalaTest-assembly-0.1.0-SNAPSHOT.jar
-
-
 -----------
 kubectl cluster-info
 
@@ -43,3 +42,12 @@ spark-submit \
   --conf spark.dynamicAllocation.minExecutors=1 \
   --conf spark.dynamicAllocation.maxExecutors=4 \
   local:///opt/bitnami/ScalaTest-assembly-0.1.0-SNAPSHOT.jar
+
+
+spark-submit \
+  --master spark://spark-master:7077 \
+  --deploy-mode client \
+  --class com.scala.hadoop.SparkSubmitKafkaAmazonData \
+  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.5 \
+  --conf spark.jars.ivy=/tmp/.ivy2 \
+  /opt/bitnami/ScalaTest-assembly-0.1.0-SNAPSHOT.jar
