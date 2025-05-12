@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: resourcemanager
-          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:1.0
           env:
             - name: CLUSTER_NAME
               value: HadoopCluster

@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         - name: mapreduce-history
-          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:1.0
           env:
             - name: HADOOP_ROLE
               value: mapreduce-history

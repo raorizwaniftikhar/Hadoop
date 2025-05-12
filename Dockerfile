@@ -1,5 +1,5 @@
 # 🌱 Start from the base Ubuntu image
-FROM  ubuntu:latest
+FROM  ubuntu:24.04
 
 # Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive

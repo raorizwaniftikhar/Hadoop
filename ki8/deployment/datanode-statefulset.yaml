@@ -30,7 +30,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: datanode
-        image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+        image: raorizwaniftikhar/hadoop-echo-systems-ki8:1.0
         ports:
         - containerPort: 9864  # Web UI
         - containerPort: 9866  # Data Transfer

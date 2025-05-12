@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: namenode
-          image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+          image: raorizwaniftikhar/hadoop-echo-systems-ki8:1.0
           ports:
             - containerPort: 9870
             - containerPort: 8020

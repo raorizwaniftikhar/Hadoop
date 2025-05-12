@@ -3,6 +3,16 @@ amzon-review-data/
 archive (3).zip
 .DS_Store
 .idea/*
+*/target/** */
+*.class
+*.jar
+*.log
+*.iml
+*.out
+*.swp
+*.swo
+*.swm
+*.xml
 hadoop jar Amazon-Review-1.0-SNAPSHOT.jar com.java.hadoop.AverageRatingPerCategory /aws/amzon-review-data /output/amazon_reviews-new
 
 spark-submit \

@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: journalnode
-        image: raorizwaniftikhar/hadoop-echo-systems-ki8:latest
+        image: raorizwaniftikhar/hadoop-echo-systems-ki8:1.0
         ports:
         - containerPort: 8485
         - containerPort: 8480

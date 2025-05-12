@@ -200,19 +200,21 @@ add_ssh_known_hosts
 
 ROLE=$(hostname)
 
-# Normalize roles from hostname patterns
-if [[ "$ROLE" =~ ^namenode(-deployment)?-[0-9]+$ ]]; then
+# Normalize roles from hostname
+if [[ "$ROLE" =~ ^namenode-[0-9]+$ ]]; then
   ROLE="namenode"
 elif [[ "$ROLE" =~ ^datanode-[0-9]+$ ]]; then
   ROLE="datanode"
-elif [[ "$ROLE" =~ ^resourcemanager(-deployment)?-[0-9]+$ ]]; then
+elif [[ "$ROLE" =~ ^resourcemanager(-deployment)?(-[0-9]+)?$ ]]; then
   ROLE="resourcemanager"
-elif [[ "$ROLE" =~ ^nodemanager(-deployment)?-[0-9]+$ ]]; then
+elif [[ "$ROLE" =~ ^nodemanager(-[a-z0-9]+)?$ ]]; then
   ROLE="nodemanager"
-elif [[ "$ROLE" =~ ^mapreduce-history(-deployment)?-[0-9]+$ ]]; then
+elif [[ "$ROLE" =~ ^mapreduce-history(-[a-z0-9]+)?$ ]]; then
   ROLE="mapreduce-history"
-elif [[ "$ROLE" =~ ^zkfc-format(-job)?-[a-z0-9]+$ ]]; then
+elif [[ "$ROLE" =~ ^zkfc-format(-job)?(-[a-z0-9]+)?$ ]]; then
   ROLE="zkfc-format"
+elif [[ "$ROLE" =~ ^journalnode-[0-9]+$ ]]; then
+  ROLE="journalnode"
 fi
 
 
@@ -222,7 +224,7 @@ case "$ROLE" in
     start_hdfs
     start_hbase_master
     ;;
-  datanode1|datanode2)
+  datanode)
     start_datanode
     ;;
   resourcemanager)
