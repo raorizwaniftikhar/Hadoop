@@ -3,3 +3,24 @@ amzon-review-data/
 archive (3).zip
 .DS_Store
 .idea/*
+.*iml
+*.class
+*.xml
+*.log
+*.jar
+*.war
+*.ear
+*.class
+*.db
+*.hprof
+*.swp
+*.swo
+*.swn
+*.lock
+*.tmp
+*.bak
+*.orig
+*.swm
+*.cache
+**/target/**
+**/.idea/**
