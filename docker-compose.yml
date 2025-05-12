@@ -20,7 +20,8 @@ services:
   # HDFS DataNode 1
   datanode1:
     image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
-    hostname: datanode
+    container_name: datanode1
+    hostname: datanode1
     environment:
       - CLUSTER_NAME=HadoopCluster
       - NAMENODE_HOST=namenode
@@ -29,35 +30,33 @@ services:
     restart: always
     depends_on:
       - namenode
-    # ports:
-    #   - "9864:9864"   # Web UI
-    #   - "9866:9866"   # Data Transfer
-    #   - "9867:9867"   # IPC
+    ports:
+      - "9864:9864"   # Web UI
+      - "9866:9866"   # Data Transfer
+      - "9867:9867"   # IPC
     networks:
       - hadoop-net
     tty: true
-    deploy:
-      replicas: 3
 
-  # datanode2:
-  #   image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
-  #   container_name: datanode2
-  #   hostname: datanode2
-  #   environment:
-  #     - CLUSTER_NAME=HadoopCluster
-  #     - NAMENODE_HOST=namenode
-  #   volumes:
-  #     - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
-  #   restart: always
-  #   depends_on:
-  #     - namenode
-  #   ports:
-  #     - "9874:9864"   # Web UI
-  #     - "9876:9866"   # Data Transfer
-  #     - "9877:9867"   # IPC
-  #   networks:
-  #     - hadoop-net
-  #   tty: true
+  datanode2:
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
+    container_name: datanode2
+    hostname: datanode2
+    environment:
+      - CLUSTER_NAME=HadoopCluster
+      - NAMENODE_HOST=namenode
+    volumes:
+      - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
+    restart: always
+    depends_on:
+      - namenode
+    ports:
+      - "9874:9864"   # Web UI
+      - "9876:9866"   # Data Transfer
+      - "9877:9867"   # IPC
+    networks:
+      - hadoop-net
+    tty: true
 
   mapreduce-history:
     image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
