@@ -1,5 +1,5 @@
 # 🌱 Start from the base Ubuntu image
-FROM  ubuntu:latest
+FROM  ubuntu:24.04
 
 # Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -125,8 +125,8 @@ COPY start-services.sh /usr/local/bin/
 USER root
 RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
     chmod 0440 /etc/sudoers.d/ubuntu && \
-    chmod +x /usr/local/bin/start-services.sh \
-    && /opt/hive/bin/schematool -initSchema -dbType derby
+    chmod +x /usr/local/bin/start-services.sh 
+    # && /opt/hive/bin/schematool -initSchema -dbType derby
 
 # Set the default user to 'ubuntu' (as your user is 'ubuntu')
 USER ubuntu

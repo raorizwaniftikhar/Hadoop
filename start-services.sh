@@ -181,13 +181,16 @@ generate_ssh_host_keys
 start_ssh_service
 add_ssh_known_hosts
 
+if [[ "$ROLE" =~ ^datanode-[0-9]+$ ]]; then
+  ROLE="datanode
+
 case "$ROLE" in
   namenode)
     format_namenode
     start_hdfs
     start_hbase_master
     ;;
-  datanode1|datanode2)
+  datanode)
     start_datanode
     ;;
   resourcemanager)

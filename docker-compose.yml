@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # HDFS NameNode
   namenode:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: namenode
     hostname: namenode
     environment:
@@ -19,9 +19,8 @@ services:
 
   # HDFS DataNode 1
   datanode1:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
-    container_name: datanode1
-    hostname: datanode1
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
+    hostname: datanode
     environment:
       - CLUSTER_NAME=HadoopCluster
       - NAMENODE_HOST=namenode
@@ -30,36 +29,38 @@ services:
     restart: always
     depends_on:
       - namenode
-    ports:
-      - "9864:9864"   # Web UI
-      - "9866:9866"   # Data Transfer
-      - "9867:9867"   # IPC
+    # ports:
+    #   - "9864:9864"   # Web UI
+    #   - "9866:9866"   # Data Transfer
+    #   - "9867:9867"   # IPC
     networks:
       - hadoop-net
     tty: true
+    deploy:
+      replicas: 3
 
-  datanode2:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
-    container_name: datanode2
-    hostname: datanode2
-    environment:
-      - CLUSTER_NAME=HadoopCluster
-      - NAMENODE_HOST=namenode
-    volumes:
-      - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
-    restart: always
-    depends_on:
-      - namenode
-    ports:
-      - "9874:9864"   # Web UI
-      - "9876:9866"   # Data Transfer
-      - "9877:9867"   # IPC
-    networks:
-      - hadoop-net
-    tty: true
+  # datanode2:
+  #   image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
+  #   container_name: datanode2
+  #   hostname: datanode2
+  #   environment:
+  #     - CLUSTER_NAME=HadoopCluster
+  #     - NAMENODE_HOST=namenode
+  #   volumes:
+  #     - datanode2-data:/usr/local/hadoop/data/hdfs/datanode
+  #   restart: always
+  #   depends_on:
+  #     - namenode
+  #   ports:
+  #     - "9874:9864"   # Web UI
+  #     - "9876:9866"   # Data Transfer
+  #     - "9877:9867"   # IPC
+  #   networks:
+  #     - hadoop-net
+  #   tty: true
 
   mapreduce-history:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: mapreduce-history
     hostname: mapreduce-history
     environment:
@@ -76,7 +77,7 @@ services:
 
   # YARN ResourceManager
   resourcemanager:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: resourcemanager
     hostname: resourcemanager
     environment:
@@ -93,7 +94,7 @@ services:
 
   # YARN NodeManager
   nodemanager:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: nodemanager
     hostname: nodemanager
     environment:
@@ -187,7 +188,7 @@ services:
  
   #Temp disble due to memeory issue
   hbase-master:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: hbase-master
     hostname: hbase-master
     environment:
@@ -202,7 +203,7 @@ services:
     tty: true
 
   hbase-regionserver:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: hbase-regionserver
     hostname: hbase-regionserver
     environment:
@@ -217,7 +218,7 @@ services:
 
   # Hive Metastore  
   hive-metastore:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: hive-metastore
     environment:
       - HADOOP_ROLE=hive-metastore
@@ -228,7 +229,7 @@ services:
       - hadoop-net
 
   hive-server2:
-    image: raorizwaniftikhar/hadoop-echo-systems:latest
+    image: raorizwaniftikhar/hadoop-echo-systems-hive:1.0
     container_name: hive-server2
     environment:
       - HADOOP_ROLE=hive-server2
@@ -237,6 +238,21 @@ services:
       - "10000:10000"
     depends_on:
       - hive-metastore
+    networks:
+      - hadoop-net
+  # MySQL
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Pakistan@123
+      - MYSQL_DATABASE=hive
+      - MYSQL_USER=hive
+      - MYSQL_PASSWORD=hive
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
     networks:
       - hadoop-net
 
@@ -305,3 +321,4 @@ volumes:
   datanode1-data:
   datanode2-data:
   kafka-data:
+  mysql-data:
